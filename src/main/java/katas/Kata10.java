@@ -58,9 +58,14 @@ public class Kata10 {
         List<Map> lists = DataUtil.getLists();
         List<Map> videos = DataUtil.getVideos();
 
-        return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
-                ImmutableMap.of("id", 5, "title", "The Chamber"),
-                ImmutableMap.of("id", 3, "title", "Fracture")
-        )));
+        List<Map> result = lists.stream().map(element->{
+            List<Map> listVideos = videos.stream().filter(video->{
+                return video.get("listId").equals(element.get("id"));
+            }).collect(Collectors.toList());
+            return ImmutableMap.of("name", element.get("id"), "videos", listVideos);
+        }).collect(Collectors.toList());
+    result.forEach(System.out::println);
+
+    return result;
     }
 }

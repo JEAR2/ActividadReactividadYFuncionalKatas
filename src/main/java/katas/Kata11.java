@@ -64,8 +64,16 @@ public class Kata11 {
         List<Map> boxArts = DataUtil.getBoxArts();
         List<Map> bookmarkList = DataUtil.getBookmarkList();
 
-        return ImmutableList.of(ImmutableMap.of("name", "someName", "videos", ImmutableList.of(
-                ImmutableMap.of("id", 5, "title", "The Chamber", "time", 123, "boxart", "someUrl")
-        )));
+        List<Map> result = lists.stream().map(element-> {
+            List<Map> listVideos = videos.stream()
+                    .filter(video -> video.get("listId").equals(element.get("id")))
+                    .map(videofil -> ImmutableMap.of("id", videofil.get("id"), "title", videofil.get("title"),
+                            "time", bookmarkList.stream().filter(tim -> tim.get("videoId").equals(videofil.get("id"))).reduce((elementPrevious,elementCurrent)->elementCurrent).get().get("time"),
+                            "boxart", boxArts.stream().filter(art -> art.get("videoId").equals(videofil.get("id"))).reduce((x,y)->x).get().get("url"))).collect(Collectors.toList());
+
+            return ImmutableList.of(ImmutableMap.of("name", element.get("name"), "videos", listVideos));
+        }).flatMap(c->c.stream()).collect(Collectors.toList());
+        result.forEach(System.out::println);
+        return result;
     }
 }
