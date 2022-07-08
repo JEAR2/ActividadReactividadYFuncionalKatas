@@ -19,7 +19,7 @@ import java.util.Optional;
 public class Kata5 {
     public static Double execute() {
         List<Movie> movies = DataUtil.getMovies();
-
-        return 3.0;
+        Optional<Movie> result = movies.stream().reduce((elementPreview, elementCurrent)->(elementPreview.getRating()>elementCurrent.getRating()?elementPreview:elementCurrent));
+        return result.get().getRating();
     }
 }

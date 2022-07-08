@@ -16,7 +16,11 @@ import java.util.stream.Collectors;
 public class Kata3 {
     public static List<Integer> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
-
-        return ImmutableList.of(1, 2, 3);
+        List<Integer> result = movieLists.stream()
+                .map(element-> element.getVideos())
+                .flatMap(c -> c.stream())
+                .map(element->element.getId())
+                .collect(Collectors.toList());
+        return result;
     }
 }
