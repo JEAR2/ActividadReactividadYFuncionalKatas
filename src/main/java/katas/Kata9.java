@@ -20,7 +20,18 @@ import java.util.stream.Collectors;
 public class Kata9 {
     public static List<Map> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
+        List<Map> result = movieLists.stream()
+                .map(element->element.getVideos())
+                .flatMap(c -> c.stream())
+                .map(element ->{
+                    return ImmutableMap.of("id", element.getId(),
+                            "title", element.getTitle(),
+                            "time", new Date(),
+                            "url", element.getBoxarts().stream()
+                            .reduce((elementPreview, elementCurrent)->(elementPreview.getWidth()<elementCurrent.getWidth()?elementPreview:elementCurrent)));
 
-        return ImmutableList.of(ImmutableMap.of("id", 5, "title", "some title", "time", new Date(), "url", "someUrl"));
+                }).collect(Collectors.toList());
+        //return ImmutableList.of(ImmutableMap.of("id", 5, "title", "some title", "time", new Date(), "url", "someUrl"));
+        return result;
     }
 }

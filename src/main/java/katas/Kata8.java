@@ -24,7 +24,12 @@ public class Kata8 {
         List<Bookmark> bookMarks = DataUtil.getBookMarks();
 
         // StreamUtils.zip()
+        List<Map> result = StreamUtils.zip(movies.stream(),
+                bookMarks.stream(),
+                (elementMovie, elementBookMarks) -> ImmutableMap.of("videoId", elementMovie.getId(), "bookmarkId", elementBookMarks.getId()))
+                .collect(Collectors.toList());
+        return result;
 
-        return ImmutableList.of(ImmutableMap.of("videoId", 5, "bookmarkId", 3));
+       // return ImmutableList.of(ImmutableMap.of("videoId", 5, "bookmarkId", 3));
     }
 }

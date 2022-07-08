@@ -23,6 +23,17 @@ public class Kata7 {
     public static List<Map> execute() {
         List<MovieList> movieLists = DataUtil.getMovieLists();
 
-        return ImmutableList.of(ImmutableMap.of("id", 5, "title", "Bad Boys", "boxart", "url"));
+         List<Map> result = movieLists.stream()
+                 .map(element->element.getVideos())
+                 .flatMap(c -> c.stream())
+                .map(element ->{
+                    return ImmutableMap.of("id", element.getId(),
+                            "title", element.getTitle(),
+                            "boxart", element.getBoxarts().stream()
+                                    .reduce((elementPreview, elementCurrent)->(elementPreview.getWidth()<elementCurrent.getWidth()?elementPreview:elementCurrent)));
+
+                }).collect(Collectors.toList());
+
+        return result;
     }
 }
